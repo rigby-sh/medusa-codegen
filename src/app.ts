@@ -2,10 +2,11 @@
 // import { User } from './types/index';
 import select, { Separator } from '@inquirer/select';
 import chalk from 'chalk';
+import { ProductImporter } from './platforms/medusa';
+import { AbstractImporter } from './platforms/abstract-importer';
 
-enum Commands {
-  Toggle = "Show/Hide Completed",
-  Quit = "Quit"
+const dataFlows = {
+  'product-import': ProductImporter
 }
 
 /**
@@ -21,12 +22,12 @@ async function promptUser() {
     choices: [
       {
         name: 'Import to Medusa',
-        value: 'toMedusa',
+        value: 'import',
         description: 'Import data from external file, API or database TO Medusa',
       },
       {
         name: 'Export from Medusa',
-        value: 'fromMedusa',
+        value: 'export',
         description: 'Export data to external file, API or database FROM Medusa',
       },
     ]
@@ -51,6 +52,8 @@ async function promptUser() {
       },
     ],
   });    
+
+  (Object.create(dataFlows[`${dfType}-${dfDirection}` as keyof typeof dataFlows] as typeof AbstractImporter).prototype).run({});
 }
 
 // Main logic of the application
