@@ -29,6 +29,7 @@ const req = http.request(options, (res) => {
     });
 });
 req.write(payload);
+req.end();
 
 req.on('error', (error) => {
     console.error(chalk.bgRed('***') + chalk.white('An error occurred while pulling LLama3 model. ') + chalk.bgRed('***'))
@@ -38,10 +39,13 @@ req.on('error', (error) => {
 req.on('response', (res) => {
     if (res.statusCode === 400) {
         console.error(chalk.bgRed('***') + chalk.white('Bad request. ') + chalk.bgRed('***'));
+        process.exit(400)
     } else if (res.statusCode === 404) {
         console.error(chalk.bgRed('***') + chalk.white('Resource not found. ') + chalk.bgRed('***'));
+        process.exit(404)
+    } else {
+        process.exit(0)
     }
 });
 
 //req.write(payload);
-req.end();
