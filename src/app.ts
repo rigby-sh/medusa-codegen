@@ -1,6 +1,6 @@
 // Import necessary modules and types
 // import { User } from './types/index';
-import select, { Separator } from '@inquirer/select';
+import select from '@inquirer/select';
 import chalk from 'chalk';
 import { ProductImporter } from './platforms/medusa';
 import { AbstractImporter } from './platforms/abstract-importer';
