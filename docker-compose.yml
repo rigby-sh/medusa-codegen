@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  app:
+    image: node:21
+    working_dir: /var/app
+    depends_on:
+      - ollama
+    env_file: docker/medusa-integrai/default.env
+    tty: true # to emulate terminal for unquirer to be used
+    environment:
+      ENV: dev
+    volumes:
+      - './node_modules:/var/app/node_modules'
+      - './package.json:/var/app/package.json'
+      - './nodemon.json:/var/app/nodemon.json'
+      - './tsconfig.json:/var/app/tsconfig.json'
+      - './generated:/var/app/generated'
+      - './src:/var/app/src'
+    tmpfs:
+      - /var/dist
+    expose:
+      - '8080'
+    ports:
+      - '8080:8080'
+    command: bash -c "npm install && sleep 5 && npm run ollama-setup && npm run dev"
+    networks:
+      - ollama-docker
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - 11434:11434
+    volumes:
+      - .:/code
+      - ./ollama/ollama:/root/.ollama
+    container_name: ollama
+    pull_policy: always
+    tty: true
+    restart: always
+    networks:
+      - ollama-docker
+
+  ollama-webui:
+    image: ghcr.io/ollama-webui/ollama-webui:main
+    container_name: ollama-webui
+    volumes:
+      - ./ollama/ollama-webui:/app/backend/data
+    depends_on:
+      - ollama
+    ports:
+      - 8081:8081
+    environment:
+      - '/ollama/api=http://ollama:11434/api'
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    restart: unless-stopped
+    networks:
+      - ollama-docker
+
+networks:
+  ollama-docker:
+    external: false
+  
