@@ -1,5 +1,5 @@
 {
-    "verbose": true,
+    "verbose": false,
     "debug": false,
     "exec": "tsx src/app.ts",
     "watch": ["./src"],

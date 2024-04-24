@@ -1,6 +1,7 @@
 // Import necessary modules and types
 // import { User } from './types/index';
 import select, { Separator } from '@inquirer/select';
+import chalk from 'chalk';
 
 enum Commands {
   Toggle = "Show/Hide Completed",
@@ -14,6 +15,7 @@ enum Commands {
  * 3. Use LLama3 via Docker
  */
 async function promptUser() {
+  console.log(chalk.green('Welcome to Medusa Integr') + chalk.bgCyan('ai'));
   const dfDirection = await select({
     message: 'Select the data flow direction',
     choices: [

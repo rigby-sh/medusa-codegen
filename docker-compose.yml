@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   app:
     image: node:21
@@ -7,6 +6,7 @@ services:
       - ollama
     env_file: docker/medusa-integrai/default.env
     tty: true # to emulate terminal for unquirer to be used
+    stdin_open: true
     environment:
       ENV: dev
     volumes:
@@ -22,7 +22,7 @@ services:
       - '8080'
     ports:
       - '8080:8080'
-    command: bash -c "npm install && sleep 5 && npm run ollama-setup && npm run dev"
+    command: bash -c "npm --no-warnings install && npm run ollama-setup"
     networks:
       - ollama-docker
 
@@ -43,6 +43,7 @@ services:
   ollama-webui:
     image: ghcr.io/ollama-webui/ollama-webui:main
     container_name: ollama-webui
+    tty: true
     volumes:
       - ./ollama/ollama-webui:/app/backend/data
     depends_on:
