@@ -2,12 +2,11 @@
 // import { User } from './types/index';
 import select from '@inquirer/select';
 import chalk from 'chalk';
-import { ProductImporter } from './platforms/medusa';
-import { AbstractImporter } from './platforms/abstract-importer';
+import { generatorFactory, dataFlowSetupOptions } from './platforms/medusa';
+import { DataFlowDirection } from './types';
+import { AbstractGenerator } from './types/abstract-generator';
 
-const dataFlows = {
-  'product-import': ProductImporter
-}
+
 
 /**
  * TODO:
@@ -17,47 +16,30 @@ const dataFlows = {
  */
 async function promptUser() {
   console.log(chalk.green('Welcome to Medusa Integr') + chalk.bgCyan('ai'));
-  const dfDirection = await select({
-    message: 'Select the data flow direction',
-    choices: [
-      {
-        name: 'Import to Medusa',
-        value: 'import',
-        description: 'Import data from external file, API or database TO Medusa',
-      },
-      {
-        name: 'Export from Medusa',
-        value: 'export',
-        description: 'Export data to external file, API or database FROM Medusa',
-      },
-    ]
-  });  
-  const dfType = await select({
-    message: 'Select the entity type',
-    choices: [
-      {
-        name: 'product',
-        value: 'product',
-        description: 'Products',
-      },
-      {
-        name: 'customer',
-        value: 'customer',
-        description: 'Customers',
-      },
-      {
-        name: 'order',
-        value: 'order',
-        description: 'Orders',
-      },
-    ],
-  });    
 
-  (Object.create(dataFlows[`${dfType}-${dfDirection}` as keyof typeof dataFlows] as typeof AbstractImporter).prototype).run({});
+  const dataFlowOptions: { [key: string]: any } = {
+  }
+
+  for (const key in dataFlowSetupOptions) {
+    const setupOption = dataFlowSetupOptions[key]; // prompt user for the required data flown
+    if(setupOption.type === 'select' ) {
+      dataFlowOptions[key] = await select(setupOption);
+    }
+  }
+
+  console.log(dataFlowOptions);
+
+// productImportGenerator usage
+  const generator:AbstractGenerator = generatorFactory({
+    type: dataFlowOptions['dataFlowType'],
+    direction: dataFlowOptions['dataFlowDirection'] as DataFlowDirection
+  });
+  generator.run({}) as any;
 }
 
 // Main logic of the application
 function main() {
+  console.log('aa');
   promptUser();
 }
 

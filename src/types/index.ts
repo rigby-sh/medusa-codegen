@@ -12,4 +12,14 @@ export interface Product {
   price: number;
 }
 
+export enum DataFlowDirection {
+  import = 'import',
+  export = 'export'
+}
+
+export interface GeneratorFactoryOptions {
+  type: string,
+  direction: DataFlowDirection
+}
+
 // Add more types and interfaces as needed

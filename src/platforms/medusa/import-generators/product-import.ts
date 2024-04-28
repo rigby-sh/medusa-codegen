@@ -1,9 +1,9 @@
-import { AbstractImporter, ImporterOptions, RunContext } from '../abstract-importer';
+import { AbstractGenerator, GeneratorOptions, RunContext } from '../../../types/abstract-generator';
 import { Ollama } from 'ollama'
 
-class ProductImporter extends AbstractImporter {
+class MedusaProductImportGenerator extends AbstractGenerator {
     // Add your class methods here
-    async run(options: RunContext) {
+    async run(context: RunContext, options?: GeneratorOptions) {
         // Add your code here
         console.log('products importer')
         const ollama = new Ollama({ host: 'http://ollama:11434' })
@@ -16,4 +16,4 @@ class ProductImporter extends AbstractImporter {
     }
 }
 
-export { ProductImporter }
+export { MedusaProductImportGenerator }

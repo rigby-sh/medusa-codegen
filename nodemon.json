@@ -1,6 +1,6 @@
 {
-    "verbose": false,
-    "debug": false,
+    "verbose": true,
+    "debug": true,
     "exec": "tsx src/app.ts",
     "watch": ["./src"],
     "ext": "ts, js",
