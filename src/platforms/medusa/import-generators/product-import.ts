@@ -1,12 +1,13 @@
 import { AbstractGenerator, GeneratorOptions, RunContext } from '../../../types/abstract-generator';
 import { Ollama } from 'ollama'
 import fs from 'fs';
+import { dirname } from 'path';
 
 class MedusaProductImportGenerator extends AbstractGenerator {
     async run(context: RunContext, options?: GeneratorOptions) {
       // Add your code here
-      console.log('Generating Medusa products importer');
-      const importerTemplate = fs.readFileSync('../templates/importer.ts', 'utf-8');
+      console.log('Generating Medusa products importer '+process.cwd());
+      const importerTemplate = fs.readFileSync(process.cwd() + '/src/platforms/medusa/templates/importer.ts', 'utf-8');
       const userPrompt: String = context['userPrompt'];
 
       const ollama = new Ollama({ host: 'http://ollama:11434' });
