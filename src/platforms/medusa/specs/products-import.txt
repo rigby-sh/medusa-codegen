@@ -1,0 +1,114 @@
+POST /admin/products
+
+Request Body
+application/json
+
+Data fields:
+
+title
+required
+string
+The title of the product
+
+subtitle
+string
+The subtitle of the product
+
+description
+string
+The description of the product.
+
+is_giftcard
+boolean
+Default: false
+A flag to indicate if the product represents a gift card. purchasing products with this flag set to true will result in a gift card being created.
+
+discountable
+boolean
+Default: true
+A flag to indicate if discounts can be applied to the line items generated from this product
+
+images
+Array of strings
+An array of images of the product. each value in the array is a url to the image. you can use the upload api routes to upload the image and obtain a url.
+
+thumbnail
+string
+The thumbnail to use for the product. the value is a url to the thumbnail. you can use the upload api routes to upload the thumbnail and obtain a url.
+
+handle
+string
+A unique handle to identify the product by. if not provided, the kebab-case version of the product title will be used. this can be used as a slug in urls.
+
+status
+string
+Default: "draft"
+Enum: "draft", "proposed", "published", "rejected"
+The status of the product. the product is shown to the customer only if its status is published.
+
+type
+object
+The product type to associate the product with.
+
+collection_id
+string
+The id of the product collection the product belongs to.
+
+tags
+Array of objects
+Product tags to associate the product with.
+
+sales_channels
+Array of objects
+Sales channels to associate the product with.
+
+categories
+feature flag
+Array of objects
+Product categories to add the product to.
+
+options
+Array of objects
+The options that the product should have. a new product option will be created for every item in the array.
+
+variants
+Array of objects
+An array of product variants to create with the product. each product variant must have a unique combination of product option values.
+
+weight
+number
+The weight of the product.
+
+length
+number
+The length of the product.
+
+height
+number
+The height of the product.
+
+width
+number
+The width of the product.
+
+hs_code
+string
+The harmonized system code of the product.
+
+origin_country
+string
+The country of origin of the product.
+
+mid_code
+string
+The manufacturer identification code of the product.
+
+material
+string
+The material composition of the product.
+
+metadata
+object
+An optional set of key-value pairs with additional information.
+
+Related guide: Learn about the metadata attribute, and how to delete and update it.

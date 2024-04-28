@@ -8,12 +8,13 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       // Add your code here
       console.log('Generating Medusa products importer '+process.cwd());
       const importerTemplate = fs.readFileSync(process.cwd() + '/src/platforms/medusa/templates/importer.ts', 'utf-8');
+      const endpointSpec = fs.readFileSync(process.cwd() + '/src/platforms/medusa/specs/products-import.txt', 'utf-8');
       const userPrompt: String = context['userPrompt'];
 
       const ollama = new Ollama({ host: 'http://ollama:11434' });
 
       const message = { role: 'user', content: `\
-        You are a code generator. Return just a type script code and nothing more. Please modify the following file (between >>> and <<<): \
+        You are a code generator. Return just a type script code and nothing more. Please creatively fill in the following file (between >>> and <<<): \
         >>> \
         ${importerTemplate} \
         <<< \
@@ -21,7 +22,10 @@ class MedusaProductImportGenerator extends AbstractGenerator {
         Fill just the "processSingleRecord" and "run" functions. \
 
         Here is how the data input should be processed: ${userPrompt} \
-        Regarding the data output - it should be written to the MedusaJS REST API by HTTP POST requests. \
+        Regarding the data output - it should be written to the MedusaJS REST API by HTTP POST requests using this endpoint:  \
+
+        ${endpointSpec}
+
         Medusa instance is available at ${context.medusaUrl}
       `};
 

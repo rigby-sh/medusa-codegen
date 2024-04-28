@@ -1,0 +1,1 @@
+Read the products data from CSV file: products.csv. Each line is a single product with following collumns (comma separated): id, name, height, width

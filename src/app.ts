@@ -38,6 +38,7 @@ async function promptUser() {
     direction: dataFlowOptions['dataFlowDirection'] as DataFlowDirection
   });
   generator.run({
+    medusaUrl: 'http://medusa:9000/admin',
     userPrompt: dataFlowOptions['userPrompt']
   }) as any;
 }
