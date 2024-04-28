@@ -19,5 +19,7 @@ RUN yarn
 # Build the project
 RUN yarn build
 
+RUN npx medusa user -e some@email.com -p some-password
+
 # Define the entrypoint command
 CMD medusa migrations run && yarn start
