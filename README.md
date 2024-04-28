@@ -26,8 +26,19 @@ docker-compose run npm run dev
 
 This command uses `nodemon` and `tsx` to automatically restart the application whenever changes are made to the source files.
 
+## Ollama Web-UI
 
-This command runs the compiled JavaScript code using `node`.
+There's a Ollama WebUI instance defined in the default `docker-compose` file and after all is up - it should be available on `http://localhost:8080`
+
+## Medusa JS instance
+
+There's also a Medusa test instance defined in the `docker-compose` file - which is by default run on `http://localhost:9000/app/login`
+
+To add a default admin user please run:
+
+```
+docker-compose run medusa npx medusa user -e some@email.com -p some-password 
+```
 
 ## License
 
