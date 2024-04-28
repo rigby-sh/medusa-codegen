@@ -29,3 +29,5 @@ Thumbs.db
 ollama/
 generated/
 dist/
+
+postgres-data/

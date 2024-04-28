@@ -26,6 +26,37 @@ services:
     networks:
       - ollama-docker
 
+  db:
+    image: postgres:13
+    container_name: db
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+    restart: always
+    networks:
+      - ollama-docker
+
+  medusa:
+    build:
+      context: .
+      dockerfile: ./docker/medusa/Dockerfile
+    container_name: medusa
+    ports:
+      - 9000:9000
+    working_dir: /var/medusa
+    volumes:
+      - ./medusa/my-medusa-store:/var/medusa
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - ollama-docker
+
+
   ollama:
     image: ollama/ollama:latest
     ports:

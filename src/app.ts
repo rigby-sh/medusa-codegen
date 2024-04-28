@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import { generatorFactory, dataFlowSetupOptions } from './platforms/medusa';
 import { DataFlowDirection } from './types';
 import { AbstractGenerator } from './types/abstract-generator';
+import { input } from '@inquirer/prompts';
 
 
 
@@ -24,6 +25,8 @@ async function promptUser() {
     const setupOption = dataFlowSetupOptions[key]; // prompt user for the required data flown
     if(setupOption.type === 'select' ) {
       dataFlowOptions[key] = await select(setupOption);
+    } else if(setupOption.type === 'input') {
+      dataFlowOptions[key] = await input(setupOption);
     }
   }
 
@@ -34,7 +37,9 @@ async function promptUser() {
     type: dataFlowOptions['dataFlowType'],
     direction: dataFlowOptions['dataFlowDirection'] as DataFlowDirection
   });
-  generator.run({}) as any;
+  generator.run({
+    userPrompt: dataFlowOptions['userPrompt']
+  }) as any;
 }
 
 // Main logic of the application

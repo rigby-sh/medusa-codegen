@@ -43,7 +43,17 @@ const dataFlowSetupOptions: { [key: string]: any } ={
             description: 'Orders',
             },
         ],
-      }      
+      },
+      'userPrompt': {
+        type: 'input',
+        message: 'Enter a detailed description of the data flow input/output - for example: Generate the import from CSV file of the following structure: (id, name, price)',
+        validate: (input: string) => {
+          if (!input) {
+            return 'The custom prompt is required for the generator to run';
+          }
+          return true;
+        },
+      },
 }
 
 
