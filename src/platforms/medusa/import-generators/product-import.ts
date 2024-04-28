@@ -21,7 +21,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
         Fill just the "processSingleRecord" and "run" functions. \
 
         Here is how the data input should be processed: ${userPrompt} \
-        Regarding the data output - it should be written to the MedusaJS REST API. \
+        Regarding the data output - it should be written to the MedusaJS REST API by HTTP POST requests. \
         Medusa instance is available at ${context.medusaUrl}
       `};
 
