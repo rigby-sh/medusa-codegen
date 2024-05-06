@@ -91,7 +91,7 @@ const parameterOptions = (key: string, selectedOptions: { [key: string]: any }):
 }
 
 
-function generatorFactory(options: GeneratorFactoryOptions): AbstractGenerator {
+const generatorFactory = (options: GeneratorFactoryOptions): AbstractGenerator => {
     // Add your code here
     const mappedType = supportedDataFlows[`${options.type}-${options.direction}`];
     if(!mappedType) throw new Error(`Unsupported data flow type: ${options.type}-${options.direction}`);
