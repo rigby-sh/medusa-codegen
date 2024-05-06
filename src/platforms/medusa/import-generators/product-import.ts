@@ -12,7 +12,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       const modelName = process.env.OLLAMA_MODEL || 'llama3'
 
       const ollama = new Ollama({ 
-        baseUrl: 'http://ollama:11434',
+        baseUrl: 'http://' + process.env.OLLAMA_HOST + ':' + process.env.OLLAMA_PORT,
         model: modelName
        });
 
@@ -24,11 +24,12 @@ class MedusaProductImportGenerator extends AbstractGenerator {
         <<< \
 
         Generate a fully functional data importer. Here is the instruction how the data input should be read: ${userPrompt} \
-        Output it should be written to the MedusaJS REST API on this URL:  \
+        Output it should be written to the Medusa using the '@medusajs/client' and the admin API URL is:  \
 
         ${endpointSpec}
 
         Medusa instance is available at ${context.medusaUrl} \
+        Use only standard Node modules like fs, http and others. You can use only the following external modules: @medusajs/client\
         Please end up response with full TypeScript code inside <code></code> tag.
         `;
       console.log('Executing code generator with the following request: ')
