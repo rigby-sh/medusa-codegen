@@ -10,7 +10,6 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       const importerTemplate = fs.readFileSync(process.cwd() + '/src/platforms/medusa/templates/importer.ts', 'utf-8');
       const inputSourcePrompt: String = context['inputSource'];
       const modelName = process.env.OLLAMA_MODEL || 'llama3';
-      console.log(context['fields']);
       const fieldsToImport = medusaProductFields.filter((field) => (context.fields as string[]).includes(field.field_name));
 
       const ollama = new Ollama({ 
@@ -30,12 +29,13 @@ class MedusaProductImportGenerator extends AbstractGenerator {
         Generate a fully functional data importer. Here is the instruction how the data input should be read: ${inputSourcePrompt} \
         Output it should be written to the Medusa using the '@medusajs/client' and the admin API URL is:  \
        ${context.medusaUrl} \
-        Use only standard Node modules like fs, http and others. You can use only the following external modules: @medusajs/client\
+        Use only standard Node modules like fs, http and others. Do not use any undefined functions. You can use only the following external modules: @medusajs/client\
+        Before the data import transform the records following this instruction: ${context.dataTransform} \
         `;
-      console.log('Executing code generator with the following request: ')
-      console.log(fullPrompt);
+      console.log('Executing code generator with the following request. Please wait ...')
+      // console.log(fullPrompt);
   
-      const stream = await ollama.stream(fullPrompt);
+      const stream = await ollama.stream(fullPrompt)
 
       const chunks = [];
       for await (const chunk of stream) {

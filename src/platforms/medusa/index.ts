@@ -7,7 +7,7 @@ const supportedDataFlows: { [key: string]: typeof AbstractGenerator } = {
     'product-import': MedusaProductImportGenerator
 }
 
-const dataFlowParameters = ['dataFlowDirection', 'dataFlowType', 'fields', 'inputSource'];
+const dataFlowParameters = ['dataFlowDirection', 'dataFlowType', 'fields', 'inputSource', 'dataTransform'];
 
 /**
  * Returns the options for the given parameter
@@ -86,6 +86,16 @@ const parameterOptions = (key: string, selectedOptions: { [key: string]: any }):
           return true;
         },
       }
+      case 'dataTransform': return {
+        type: 'input',
+        message: 'Describe in plain text how the data should be transformed before hitting the target - for example: make sure product title is uppercase',
+        validate: (input: string) => {
+          if (!input) {
+            return 'The dataTransform is required for the generator to run';
+          }
+          return true;
+        },
+      }      
     }
     throw new Error(`Unsupported parameter: ${key}`);
 }
