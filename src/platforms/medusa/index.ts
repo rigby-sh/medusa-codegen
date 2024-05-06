@@ -1,13 +1,22 @@
 import { GeneratorFactoryOptions } from '../../types';
 import { AbstractGenerator, GeneratorOptions } from '../../types/abstract-generator'
 import { MedusaProductImportGenerator } from './import-generators/product-import'
+import medusaProductFields from './specs/products-import.json'
 
 const supportedDataFlows: { [key: string]: typeof AbstractGenerator } = {
     'product-import': MedusaProductImportGenerator
 }
 
-const dataFlowSetupOptions: { [key: string]: any } ={
-    'dataFlowDirection': {
+const dataFlowParameters = ['dataFlowDirection', 'dataFlowType', 'fields', 'inputSource'];
+
+/**
+ * Returns the options for the given parameter
+ */
+const parameterOptions = (key: string, selectedOptions: { [key: string]: any }): any => 
+{
+  switch (key) {  
+    case 'dataFlowDirection':
+      return {
         type: 'select',
         message: 'Select the data flow direction',
         choices: [
@@ -22,8 +31,9 @@ const dataFlowSetupOptions: { [key: string]: any } ={
             description: 'Export data to external file, API or database FROM Medusa',
           },
         ]
-      },
-      'dataFlowType': {
+     } 
+    case 'dataFlowType': 
+      return {
         type: 'select',
         message: 'Select the entity type',
         choices: [
@@ -43,17 +53,41 @@ const dataFlowSetupOptions: { [key: string]: any } ={
             description: 'Orders',
             },
         ],
-      },
-      'userPrompt': {
+      }
+      case 'fields': {
+        if (selectedOptions['dataFlowType'] === 'product') {
+          return {
+            type: 'checkbox',
+            message: 'Which fields would you like to import?',
+            choices: medusaProductFields.map(p => {
+              return {
+                name: p.field_name,
+                value: p.field_name,
+                description: p.description,
+              }
+            }),
+            validate: (input: string) => {
+              if (!input) {
+                return 'The fields list is required for the generator to run';
+              }
+              return true;
+            },
+          
+          }
+        }
+      }
+      case 'inputSource': return {
         type: 'input',
-        message: 'Enter a detailed description of the data flow input/output - for example: Generate the import from CSV file of the following structure: (id, name, price)',
+        message: 'Enter a detailed description of the data data source - include the credentials for database or file name (located in `input` folder) where suited:',
         validate: (input: string) => {
           if (!input) {
-            return 'The custom prompt is required for the generator to run';
+            return 'The inputSource is required for the generator to run';
           }
           return true;
         },
-      },
+      }
+    }
+    throw new Error(`Unsupported parameter: ${key}`);
 }
 
 
@@ -67,5 +101,6 @@ function generatorFactory(options: GeneratorFactoryOptions): AbstractGenerator {
 export {  
   generatorFactory,
   supportedDataFlows,
-  dataFlowSetupOptions
+  dataFlowParameters,
+  parameterOptions
 }

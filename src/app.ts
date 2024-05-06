@@ -2,10 +2,10 @@
 // import { User } from './types/index';
 import select from '@inquirer/select';
 import chalk from 'chalk';
-import { generatorFactory, dataFlowSetupOptions } from './platforms/medusa';
+import { generatorFactory, dataFlowParameters, parameterOptions } from './platforms/medusa';
 import { DataFlowDirection } from './types';
 import { AbstractGenerator } from './types/abstract-generator';
-import { input } from '@inquirer/prompts';
+import { checkbox, input } from '@inquirer/prompts';
 
 
 
@@ -18,34 +18,35 @@ import { input } from '@inquirer/prompts';
 async function promptUser() {
   console.log(chalk.green('Welcome to Medusa Integr') + chalk.bgCyan('ai'));
 
-  const dataFlowOptions: { [key: string]: any } = {
+  const selectedOptions: { [key: string]: any } = {
   }
 
-  for (const key in dataFlowSetupOptions) {
-    const setupOption = dataFlowSetupOptions[key]; // prompt user for the required data flown
+  for (const key of dataFlowParameters) {
+    const setupOption = parameterOptions(key, selectedOptions); // prompt user for the required data flown
     if(setupOption.type === 'select' ) {
-      dataFlowOptions[key] = await select(setupOption);
+      selectedOptions[key] = await select(setupOption);
     } else if(setupOption.type === 'input') {
-      dataFlowOptions[key] = await input(setupOption);
+      selectedOptions[key] = await input(setupOption);
+    } else if(setupOption.type === 'checkbox' ) {
+      selectedOptions[key] = await checkbox(setupOption);
     }
   }
 
-  console.log(dataFlowOptions);
+  console.log(selectedOptions);
 
 // productImportGenerator usage
   const generator:AbstractGenerator = generatorFactory({
-    type: dataFlowOptions['dataFlowType'],
-    direction: dataFlowOptions['dataFlowDirection'] as DataFlowDirection
+    type: selectedOptions['dataFlowType'],
+    direction: selectedOptions['dataFlowDirection'] as DataFlowDirection
   });
   generator.run({
-    medusaUrl: 'http://medusa:9000/admin',
-    userPrompt: dataFlowOptions['userPrompt']
+    ...selectedOptions,
+    medusaUrl: 'http://medusa:9000/admin'
   }) as any;
 }
 
 // Main logic of the application
 function main() {
-  console.log('aa');
   promptUser();
 }
 

@@ -27,7 +27,9 @@ yarn-error.log*
 Thumbs.db
 
 ollama/
-generated/
+generated/*
+input/*
+output/*
 dist/
 
 postgres-data/

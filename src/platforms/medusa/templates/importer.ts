@@ -1,12 +1,14 @@
-// Importer.ts
+import * as fs from 'fs';
+import MedusaClient from '@medusajs/medusa-js';
 
-function run(options: { [key: string]: any }) {
-    // Main function to run the whole thing
-    console.log("Running the data importer...");
+const medusa = new MedusaClient({
+  baseUrl: 'http://medusa:9000/admin',
+  maxRetries: 3,
+});
 
-    // INSERT GENERATED CODE HERE
+const inputPath = process.cwd() + '/input';
 
-    console.log("Data import completed.");
-}
+const runImport = async () => {
+};
 
-run({});
+runImport();

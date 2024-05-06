@@ -1,0 +1,192 @@
+[
+    {
+        "field_name": "title",
+        "is_required": true, 
+        "type": "string",
+        "description": "The title of the product",
+        "default": ""
+    },
+    {  
+        "field_name": "subtitle",
+        "is_required": false,
+        "type": "string",
+        "default": "",
+        "description": "The subtitle of the product"
+    },
+    { 
+        "field_name": "description",
+        "is_required": false,
+        "type": "string",
+        "default": "",
+        "description": "The description of the product"
+    },
+    {
+        "field_name": "is_giftcard",
+        "is_required": false,
+        "type": "boolean",
+        "default": false,
+        "description": "A flag to indicate if the product represents a gift card. purchasing products with this flag set to true will result in a gift card being created."
+    },
+    {
+        "field_name": "price",
+        "is_required": true,
+        "type": "number",
+        "default": 0,
+        "description": "The price of the product"
+    },
+    {
+        "field_name": "compare_at_price",
+        "is_required": false,
+        "type": "number",
+        "default": 0,
+        "description": "The compare at price of the product"
+    },
+    {
+        "field_name": "discountable",
+        "is_required": false,
+        "type": "boolean",
+        "default": true,
+        "description": "A flag to indicate if discounts can be applied to the line items generated from this product"
+    },
+    {
+        "field_name": "images",
+        "is_required": false,
+        "type": "array",
+        "default": [],
+        "description": "An array of images of the product. each value in the array is a url to the image. you can use the upload api routes to upload the image and obtain a url."
+    },
+    {
+        "field_name": "thumbnail",
+        "is_required": false,
+        "type": "string",
+        "default": "",
+        "description": "The thumbnail to use for the product. the value is a url to the thumbnail. you can use the upload api routes to upload the thumbnail and obtain a url."
+    },
+    {
+        "field_name": "handle",
+        "is_required": false,
+        "type": "string",
+        "default": "",
+        "description": "A unique handle to identify the product by. if not provided, the kebab-case version of the product title will be used. this can be used as a slug in urls."
+    },
+    {
+        "field_name": "status",
+        "is_required": false,
+        "type": "string",
+        "default": "draft",
+        "description": "The status of the product. the product is shown to the customer only if its status is published.",
+        "enum": ["draft", "proposed", "published", "rejected"]
+    },
+    {
+        "field_name": "type",
+        "is_required": false,
+        "type": "object",
+        "default": "",
+        "description": "The product type to associate the product with."
+    },
+    {
+        "field_name": "collection_id",
+        "is_required": false,
+        "type": "string",
+        "default": "",
+        "description": "The id of the product collection the product belongs to."
+    },
+    {
+        "field_name": "tags",  
+        "is_required": false,
+        "type": "array",
+        "default": [],
+        "description": "Product tags to associate the product with."
+    },
+    {
+        "field_name": "sales_channels",
+        "is_required": false,
+        "type": "array",
+        "default": [],
+        "description": "Sales channels to associate the product with."
+    },
+    {
+        "field_name": "categories",
+        "is_required": false,
+        "type": "array",
+        "default": [],
+        "description": "Product categories to add the product to."
+    },
+    {
+        "field_name": "options",   
+        "is_required": false,
+        "type": "array",
+        "default": [],
+        "description": "The options that the product should have. a new product option will be created for every item in the array."
+    },
+    {
+        "field_name": "variants",
+        "is_required": false,
+        "type": "array",
+        "default": [],
+        "description": "An array of product variants to create with the product. each product variant must have a unique combination of product option values."
+    },
+    {
+        "field_name": "weight",
+        "is_required": false,
+        "type": "number",
+        "default": 0,
+        "description": "The weight of the product."
+    },
+    {
+        "field_name": "length",
+        "is_required": false,
+        "type": "number",
+        "default": 0,
+        "description": "The length of the product."
+    },
+    {
+        "field_name": "height",
+        "is_required": false,
+        "type": "number",
+        "default": 0,
+        "description": "The height of the product."
+    },
+    {
+        "field_name": "width",
+        "is_required": false,
+        "type": "number",
+        "default": 0,
+        "description": "The width of the product."
+    },
+    {
+        "field_name": "hs_code",
+        "is_required": false,
+        "type": "string",
+        "default": "",
+        "description": "The harmonized system code of the product."
+    },
+    {
+        "field_name": "origin_country",
+        "is_required": false,
+        "type": "string",
+        "default": "",
+        "description": "The country of origin of the product."
+    },
+    {
+        "field_name": "mid_code",
+        "is_required": false,
+        "type": "string",
+        "default": "",
+        "description": "The manufacturer identification code of the product."
+    },
+    {
+        "field_name": "material",
+        "is_required": false,
+        "type": "string",
+        "default": "",
+        "description": "The material composition of the product."
+    },
+    {
+        "field_name": "metadata",
+        "is_required": false,
+        "type": "object",
+        "default": {},
+        "description": "An optional set of key-value pairs with additional information."
+    }
+]

@@ -1,6 +1,4 @@
 interface GeneratorOptions {
-    medusaUrl: string;
-    credentials: string;
     // Add any other options you need
 }
 
@@ -10,7 +8,7 @@ class AbstractGenerator {
         this.options = options
     }
     // Define the properties and methods of the AbstractImporter interface
-    async run(context: RunContext, options?: GeneratorOptions): Promise<void> {
+    async run(context: RunContext): Promise<void> {
         // Add implementation here
     }
 }
