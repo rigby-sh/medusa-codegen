@@ -1,8 +1,9 @@
 import http from 'http';
 import chalk from 'chalk';
 
+const modelName = process.env.OLLAMA_MODEL || 'llama3';
 const payload = JSON.stringify({
-    name: 'llama3'
+    name: modelName,
 });
 
 const options = {
@@ -16,7 +17,7 @@ const options = {
     }
 };
 
-console.log(chalk.bgYellow('***') + ' ' + chalk.green(' Pulling LLama3 model (4.7GB) it make take several minutes. Please wait... ') + chalk.bgYellow('***\r\n'));
+console.log(chalk.bgYellow('***') + ' ' + chalk.green(' Pulling ' + modelName + ' model. It make take several minutes. Please wait... ') + chalk.bgYellow('***\r\n'));
 
 const req = http.request(options, (res) => {
     res.setEncoding('utf8');
@@ -26,7 +27,7 @@ const req = http.request(options, (res) => {
     });
 
     res.on('error', (error) => {
-        console.error(chalk.bgRed('***') + chalk.white('An error occurred while pulling LLama3 model. ') + chalk.bgRed('***'))
+        console.error(chalk.bgRed('***') + chalk.white('An error occurred while pulling ' + modelName + ' model. ') + chalk.bgRed('***'))
         console.error(error);
     });
 
@@ -38,7 +39,7 @@ const req = http.request(options, (res) => {
             console.error(chalk.bgRed('***') + chalk.white('Resource not found. ') + chalk.bgRed('***'));
             process.exit(404)
         } else {
-            console.info(chalk.bgGreen('***') + chalk.white('Done! LLama3 is ready ') + chalk.bgGreen('***'));
+            console.info(chalk.bgGreen('***') + chalk.white('Done! ' + modelName + ' is ready ') + chalk.bgGreen('***'));
             console.info('\n\n' + chalk.green('Now you can run: ' + chalk.bgYellowBright('docker-compose run app npm run dev') + ' to start the interactive shell'))
             process.exit(0)            
         }

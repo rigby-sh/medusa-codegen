@@ -10,6 +10,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       const importerTemplate = fs.readFileSync(process.cwd() + '/src/platforms/medusa/templates/importer.ts', 'utf-8');
       const endpointSpec = fs.readFileSync(process.cwd() + '/src/platforms/medusa/specs/products-import.txt', 'utf-8');
       const userPrompt: String = context['userPrompt'];
+      const modelName = process.env.OLLAMA_MODEL || 'llama3'
 
       const ollama = new Ollama({ host: 'http://ollama:11434' });
 
@@ -31,7 +32,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
 
       console.log(message);
 
-      const response = await ollama.chat({ model: 'llama3', messages: [message], stream: true });
+      const response = await ollama.chat({ model: modelName, messages: [message], stream: true });
       for await (const part of response) {
         process.stdout.write(part.message.content);
       }
