@@ -22,6 +22,9 @@
   "dependencies": {
     "@inquirer/prompts": "^5.0.1",
     "@inquirer/select": "^2.3.1",
+    "@langchain/community": "^0.0.54",
+    "@langchain/openai": "^0.0.28",
+    "@medusajs/medusa-js": "^6.1.8",
     "axios": "^1.6.8",
     "chalk": "^5.3.0",
     "inquirer": "^9.2.19",

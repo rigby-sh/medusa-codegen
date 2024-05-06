@@ -1,7 +1,6 @@
 import { AbstractGenerator, GeneratorOptions, RunContext } from '../../../types/abstract-generator';
-import { Ollama } from 'ollama'
+import { Ollama } from "@langchain/community/llms/ollama";
 import fs from 'fs';
-import { dirname } from 'path';
 
 class MedusaProductImportGenerator extends AbstractGenerator {
     async run(context: RunContext, options?: GeneratorOptions) {
@@ -12,30 +11,35 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       const userPrompt: String = context['userPrompt'];
       const modelName = process.env.OLLAMA_MODEL || 'llama3'
 
-      const ollama = new Ollama({ host: 'http://ollama:11434' });
+      const ollama = new Ollama({ 
+        baseUrl: 'http://ollama:11434',
+        model: modelName
+       });
 
-      const message = { role: 'user', content: `\
-        You are a code generator. Return just a type script code and nothing more. Please creatively fill in the following file (between >>> and <<<): \
+      const fullPrompt =         
+        `\
+        Here is a data import program template in TypeScript: \
         >>> \
         ${importerTemplate} \
         <<< \
 
-        Fill just the "processSingleRecord" and "run" functions. \
-
-        Write also the code to read the data input. Here is how the data input should be read: ${userPrompt} \
-        Regarding the data output - it should be written to the MedusaJS REST API by HTTP POST requests using this endpoint:  \
+        Generate a fully functional data importer. Here is the instruction how the data input should be read: ${userPrompt} \
+        Output it should be written to the MedusaJS REST API on this URL:  \
 
         ${endpointSpec}
 
-        Medusa instance is available at ${context.medusaUrl}
-      `};
+        Medusa instance is available at ${context.medusaUrl} \
+        Please end up response with full TypeScript code inside <code></code> tag.
+        `;
+      console.log('Executing code generator with the following request: ')
+      console.log(fullPrompt);
+  
+      const stream = await ollama.stream(fullPrompt);
 
-      console.log(message);
-
-      const response = await ollama.chat({ model: modelName, messages: [message], stream: true });
-      for await (const part of response) {
-        process.stdout.write(part.message.content);
-      }
+      const chunks = [];
+      for await (const chunk of stream) {
+        process.stdout.write(chunk);
+      }      
       // TODO: write file to `generators` directory
     }
 }
