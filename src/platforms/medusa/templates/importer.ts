@@ -1,10 +1,17 @@
-import * as fs from 'fs';
-import MedusaClient from '@medusajs/medusa-js';
+import Medusa from "@medusajs/medusa-js"
 
-const medusa = new MedusaClient({
-  baseUrl: 'http://medusa:9000/admin',
-  maxRetries: 3,
-});
+const MEDUSA_BACKEND_URL = 'http://medusa:9000/admin'
+const MEUDUSA_USERNAME = ''
+const MEDUSA_PASSWORD = ''
+
+const medusa = new Medusa({ baseUrl: MEDUSA_BACKEND_URL, maxRetries: 3 })
+medusa.admin.auth.createSession({
+  email: MEUDUSA_USERNAME,
+  password: MEDUSA_PASSWORD,
+})
+.then(({ user }) => {
+  console.log(user.id);
+})
 
 const inputPath = process.cwd() + '/input';
 

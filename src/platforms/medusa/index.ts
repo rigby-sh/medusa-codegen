@@ -1,13 +1,13 @@
 import { GeneratorFactoryOptions } from '../../types';
 import { AbstractGenerator, GeneratorOptions } from '../../types/abstract-generator'
 import { MedusaProductImportGenerator } from './import-generators/product-import'
-import medusaProductFields from './specs/products-import.json'
+import medusaProductFields from './specs/products/medusa-product-fields.json'
 
 const supportedDataFlows: { [key: string]: typeof AbstractGenerator } = {
     'product-import': MedusaProductImportGenerator
 }
 
-const dataFlowParameters = ['dataFlowDirection', 'dataFlowType', 'fields', 'inputSource', 'dataTransform'];
+const dataFlowParameters = ['dataFlowDirection', 'dataFlowType', 'fields', 'inputSource', 'dataTransform', 'medusaUserName', 'medusaPassword'];
 
 /**
  * Returns the options for the given parameter
@@ -95,7 +95,29 @@ const parameterOptions = (key: string, selectedOptions: { [key: string]: any }):
           }
           return true;
         },
-      }      
+      }       
+      case 'medusaUserName': return {
+        type: 'input',
+        default: 'some@email.com',
+        message: 'Enter Medusa API username',
+        validate: (input: string) => {
+          if (!input) {
+            return 'The medusaUserName is required for the generator to run';
+          }
+          return true;
+        },
+      }
+      case 'medusaPassword': return {
+        type: 'input',
+        default: 'some-password',
+        message: 'Enter Medusa API password',
+        validate: (input: string) => {
+          if (!input) {
+            return 'The medusaPassword is required for the generator to run';
+          }
+          return true;
+        },
+      }
     }
     throw new Error(`Unsupported parameter: ${key}`);
 }
