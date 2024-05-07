@@ -20,6 +20,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
        });
 
       // TODO: we'll probably need to add a full RAG support with vector store given support for all diferent input sources and how to use them
+      // TODO: make it just filling the template not having to know the MedusaJS API - provide an example witihn the template so it just needs to use the fields spec
       const fullPrompt =         
         `\
         Here is a data import program template in TypeScript: \
@@ -28,7 +29,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
         <<< \
 
         Here are the selected input fields: ${JSON.stringify(fieldsToImport)} \
-        Required medusajs/client API methods: ${productsCreateSpec}
+        You can not use fields out of this specification.
 
         Generate a fully functional data importer. Here is the instruction how the data input should be read: ${inputSourcePrompt} \
         Output it should be written to the Medusa using the '@medusajs/client' and the admin API URL is:  \
