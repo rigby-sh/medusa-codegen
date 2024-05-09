@@ -23,24 +23,24 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       // TODO: make it just filling the template not having to know the MedusaJS API - provide an example witihn the template so it just needs to use the fields spec
       const fullPrompt =         
         `\
-        Here is a data import program template in TypeScript: \
+        Modify the import program: \
         >>> \
         ${importerTemplate} \
         <<< \
 
-        Here are the selected input fields: ${JSON.stringify(fieldsToImport)} \
-        You can not use fields out of this specification.
-
-        Generate a fully functional data importer. Here is the instruction how the data input should be read: ${inputSourcePrompt} \
-        Output it should be written to the Medusa using the '@medusajs/client' and the admin API URL is:  \
-        ${context.medusaUrl} \
-        Medusa API user name is: ${context.medusaUsername} \
-        Medusa API password is: ${context.medusaPassword} \
-        Use only standard Node modules like fs, http and others. Do not use any undefined functions. You can use only the following external modules: @medusajs/client\
-        Before the data import transform the records following this instruction: ${context.dataTransform} \
-        `;
+       You're importing products to Medusa. Modify "runImport" function to read the data from the source: ${inputSourcePrompt}.
+       Use function "importSingleProduct" to process all records in the source.
+       Within "transformSopurceDataToMedus" generate code to apply this data transform logic: ${context.dataTransform} \
+       Then, modify function "transformSourceDataToMedusa" to return data in MedusaJS format:
+       ${JSON.stringify(fieldsToImport)} \
+       You can not use fields out of this specification.
+       Set the constant "MEDUSA_BACKEND_URL" to ${context.medusaUrl} \
+       Set the constant "MEUDUSA_USERNAME" to ${context.medusaUserName} \
+       Set the constant "MEUDUSA_PASSWORD" to: ${context.medusaPassword} \
+       Use only standard Node modules like fs, http and others. Do not use any undefined functions.
+       `;
       console.log('Executing code generator. Please wait ...')
-      // console.log(fullPrompt);
+      console.log(fullPrompt);
   
       const stream = await ollama.stream(fullPrompt)
 
