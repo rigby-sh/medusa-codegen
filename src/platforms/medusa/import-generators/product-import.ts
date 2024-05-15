@@ -50,10 +50,10 @@ class MedusaProductImportGenerator extends AbstractGenerator {
        2.2 Use function "importSingleProduct" to process every record read by "parseSingleRecord" function. \
        2.3 Within "transformSopurceDataToMedusa" generate code to apply this data transform logic: ${context.dataTransform} \
        2.4 Then, modify function "transformSourceDataToMedusa" to return data in MedusaJS format:
-       from input fields: ${context.inputFields}
-       transform to output fields:
+       from input fields: ${context.inputFields}\n
+       map to output fields: \n
        ${JSON.stringify(fieldsToImport)} \
-       You can not use fields out of this specification.
+       Only these outpupt fields should be returned. \
        Set the constant "MEDUSA_BACKEND_URL" to ${context.medusaUrl} \
        Set the constant "MEUDUSA_USERNAME" to ${context.medusaUserName} \
        Set the constant "MEUDUSA_PASSWORD" to: ${context.medusaPassword} \
