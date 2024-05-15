@@ -9,10 +9,12 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       // Add your code here
       console.log('Generating Medusa products importer '+process.cwd());
       const importerTemplate = fs.readFileSync(process.cwd() + '/src/platforms/medusa/templates/importer.ts', 'utf-8');
+      const importerSourceTemplate = fs.readFileSync(process.cwd() + '/src/importers/import-csv.ts', 'utf-8');
+      
       const inputSourcePrompt: String = context['inputSource'];
       const modelName = process.env.OLLAMA_MODEL || 'llama3';
       const fieldsToImport = medusaProductFields.filter((field) => (context.fields as string[]).includes(field.field_name));
-      const productsCreateSpec =  fs.readFileSync(process.cwd() + '/src/platforms/medusa/specs/products/products.create.mdx', 'utf-8');
+      
 
       const ollama = new Ollama({ 
         baseUrl: 'http://' + process.env.OLLAMA_HOST + ':' + process.env.OLLAMA_PORT,
@@ -28,9 +30,16 @@ class MedusaProductImportGenerator extends AbstractGenerator {
         ${importerTemplate} \
         <<< \
 
-       You're importing products to Medusa. Modify "runImport" function to read the data from the source: ${inputSourcePrompt}.
+       You're importing products to Medusa.
+       Modify "runImport" function to read the data from the source: ${inputSourcePrompt}.
+       Use "processInput" and "parseSingleRecord" functions from the example below to read it. Merge import definitions from template above and code below.
+
+       >>> \
+       ${importerSourceTemplate} \
+       <<< \
+
        Use function "importSingleProduct" to process all records in the source.
-       Within "transformSopurceDataToMedus" generate code to apply this data transform logic: ${context.dataTransform} \
+       Within "transformSopurceDataToMedusa" generate code to apply this data transform logic: ${context.dataTransform} \
        Then, modify function "transformSourceDataToMedusa" to return data in MedusaJS format:
        ${JSON.stringify(fieldsToImport)} \
        You can not use fields out of this specification.
@@ -47,7 +56,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       const chunks = [];
       for await (const chunk of stream) {
         process.stdout.write(chunk);
-        chunks.push(chunk);
+        chunks.push(chunk);   
       }
 
       const codeBlocks = findCodeBlocks(chunks.join(''));
