@@ -4,14 +4,39 @@ import fs from 'fs';
 import medusaProductFields from '../specs/products/medusa-product-fields.json';
 import { findCodeBlocks } from '../../../helpers';
 
+import { MemoryVectorStore } from "langchain/vectorstores/memory";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
+import { TextLoader } from "langchain/document_loaders/fs/text";
+
+
+async function importersVectorStore() {
+  const loader = new DirectoryLoader(
+    process.cwd() + "/src/importers",
+    {
+      ".ts": (path: string) => new TextLoader(path),
+    }
+  );
+  const docs = await loader.load();
+  // Load the docs into the vector store
+  const vectorStore = await MemoryVectorStore.fromDocuments(
+    docs,
+    new OpenAIEmbeddings()
+  );
+
+  return vectorStore
+}
+
+
+
 class MedusaProductImportGenerator extends AbstractGenerator {
     async run(context: RunContext) {
       // Add your code here
       console.log('Generating Medusa products importer '+process.cwd());
       const importerTemplate = fs.readFileSync(process.cwd() + '/src/platforms/medusa/templates/importer.ts', 'utf-8');
-      const importerSourceTemplate = fs.readFileSync(process.cwd() + '/src/importers/import-csv.ts', 'utf-8');
+      let importerSourceTemplate = fs.readFileSync(process.cwd() + '/src/import-sources/import-csv.ts', 'utf-8'); // the default one
       
-      const inputSourcePrompt: String = context['inputSource'];
+      const inputSourcePrompt: string = context['inputSource'];
       const modelName = process.env.OLLAMA_MODEL || 'llama3';
       const fieldsToImport = medusaProductFields.filter((field: any) => (context.fields as string[]).includes(field.field_name));
 
@@ -19,6 +44,14 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       const datestring = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear() + "-" + d.getHours() + "-" + d.getMinutes();
       const outputFileName = process.cwd() + '/generated/product.ts';
       const outputFileNameSnapshot = process.cwd() + '/generated/product-' + datestring + '.ts';
+
+      const vectorStore = await importersVectorStore();
+      const resultOne = await vectorStore.similaritySearch(inputSourcePrompt, 1);
+
+      if (resultOne){
+        importerSourceTemplate = resultOne[0].pageContent;
+        console.log('Found input source template: ' + importerSourceTemplate);
+      }
 
       const ollama = new Ollama({ 
         baseUrl: 'http://' + process.env.OLLAMA_HOST + ':' + process.env.OLLAMA_PORT,
