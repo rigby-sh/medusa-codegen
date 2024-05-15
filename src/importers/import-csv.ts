@@ -39,8 +39,15 @@ function parseSingleRecord(line: string, columnNames: string[]): Record<string, 
     return record;
 }
 
+function processSingleRecord(record: any, columnNames) {
+    record = parseSingleRecord(record, columnNames);
+    // Apply any transformation logic here
+    return record;
+}
+
 // Example usage
 const filePath = 'path_to_your_file.csv'; // Change to your file path
+
 
 async function processInput() {
     const columnNames = await readColumnNames(filePath);
@@ -51,7 +58,7 @@ async function processInput() {
     });
 
     rl.on('line', (line) => {
-        const record = parseSingleRecord(line, columnNames);
+        const record = processSingleRecord(line, columnNames);
         console.log(record);
     });
 }

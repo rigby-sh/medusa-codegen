@@ -13,8 +13,12 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       
       const inputSourcePrompt: String = context['inputSource'];
       const modelName = process.env.OLLAMA_MODEL || 'llama3';
-      const fieldsToImport = medusaProductFields.filter((field) => (context.fields as string[]).includes(field.field_name));
-      
+      const fieldsToImport = medusaProductFields.filter((field: any) => (context.fields as string[]).includes(field.field_name));
+
+      const d = new Date()
+      const datestring = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear() + "-" + d.getHours() + "-" + d.getMinutes();
+      const outputFileName = process.cwd() + '/generated/product.ts';
+      const outputFileNameSnapshot = process.cwd() + '/generated/product-' + datestring + '.ts';
 
       const ollama = new Ollama({ 
         baseUrl: 'http://' + process.env.OLLAMA_HOST + ':' + process.env.OLLAMA_PORT,
@@ -25,31 +29,40 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       // TODO: make it just filling the template not having to know the MedusaJS API - provide an example witihn the template so it just needs to use the fields spec
       const fullPrompt =         
         `\
-        Modify the import program: \
+        Generate the code for TypeScript program which Imports the data: ${inputSourcePrompt}\
+
+        by merging this importer code:
+
+        >>> \
+        ${importerSourceTemplate} \
+        <<< \
+
+        with this template:
+
         >>> \
         ${importerTemplate} \
         <<< \
 
-       You're importing products to Medusa.
-       Modify "runImport" function to read the data from the source: ${inputSourcePrompt}.
-       Use "processInput" and "parseSingleRecord" functions from the example below to read it. Merge import definitions from template above and code below.
-
-       >>> \
-       ${importerSourceTemplate} \
-       <<< \
-
-       Use function "importSingleProduct" to process all records in the source.
-       Within "transformSopurceDataToMedusa" generate code to apply this data transform logic: ${context.dataTransform} \
-       Then, modify function "transformSourceDataToMedusa" to return data in MedusaJS format:
+       In "runImport" tunction: 
+       1. Open data source with "processInput" function. 
+       2. Modify the "processSingleRecord" function:
+       2.1 Parse the source file and extract the relevant fields using "parseSingleRecord" function. \
+       2.2 Use function "importSingleProduct" to process every record read by "parseSingleRecord" function. \
+       2.3 Within "transformSopurceDataToMedusa" generate code to apply this data transform logic: ${context.dataTransform} \
+       2.4 Then, modify function "transformSourceDataToMedusa" to return data in MedusaJS format:
+       from input fields: ${context.inputFields}
+       transform to output fields:
        ${JSON.stringify(fieldsToImport)} \
        You can not use fields out of this specification.
        Set the constant "MEDUSA_BACKEND_URL" to ${context.medusaUrl} \
        Set the constant "MEUDUSA_USERNAME" to ${context.medusaUserName} \
        Set the constant "MEUDUSA_PASSWORD" to: ${context.medusaPassword} \
        Use only standard Node modules like fs, http and others. Do not use any undefined functions.
+       \n
+       Return the full source code of entire program including all imports, constains and functions. \
        `;
       console.log('Executing code generator. Please wait ...')
-      console.log(fullPrompt);
+      // console.log(fullPrompt);
   
       const stream = await ollama.stream(fullPrompt)
 
@@ -60,7 +73,16 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       }
 
       const codeBlocks = findCodeBlocks(chunks.join(''));
-      console.log(codeBlocks);
+      if(codeBlocks.blocks.length === 0) {
+        console.error('No code blocks found in the output');
+        return;
+      } else {
+        const generatedCode = codeBlocks.blocks.map(b => b.code).join('\n');
+        console.info('Writing code to file: ' + outputFileNameSnapshot + ' and ' + outputFileName);
+        fs.writeFileSync(outputFileNameSnapshot, generatedCode);
+        fs.writeFileSync(outputFileName, generatedCode);
+      }
+      
       // TODO: write file to `generators` directory
     }
 }
