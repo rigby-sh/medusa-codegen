@@ -1,4 +1,24 @@
+import { OpenAI } from "@langchain/openai";
+import { Ollama } from "@langchain/community/llms/ollama";
 const PATTERN = /^([A-Za-z \t]*)```([A-Za-z]*)?\n([\s\S]*?)```([A-Za-z \t]*)*$/gm
+
+
+export function llmFactory(modelName: string, openAIApiKey: string = process.env['OPENAI_API_KEY'] ?? '') {
+
+    if (openAIApiKey === '') {
+        console.debug('Using Ollama as LLM');
+        return new Ollama({ 
+            baseUrl: 'http://' + process.env.OLLAMA_HOST + ':' + process.env.OLLAMA_PORT,
+            model: modelName
+           });
+    } else {
+        console.debug('Using OpenAI as LLM');
+        return new OpenAI({
+            model: "gpt-4o", // Defaults to "gpt-3.5-turbo-instruct" if no model provided.
+            temperature: 0.9,
+          });
+    }
+}
 
 function getLineNumber(text = '', matches: any) {
     return countLines(text.substr(0, matches.index))
@@ -9,7 +29,7 @@ function countLines(text = '') {
 }
 
 
-export function findCodeBlocks(block: string) {
+export function findCodeBlocks(block: string, singleBlockMode = true) {
   let matches
   let errors = []
   let blocks = []
@@ -60,6 +80,16 @@ export function findCodeBlocks(block: string) {
         code: content.trim()
       })
     }
+  }
+
+  if (blocks.length === 0 && singleBlockMode) {
+    blocks.push({
+        line: 0,
+        position:0,
+        syntax: '',
+        block: '',
+        code: block.trim()
+      })    
   }
 
   return {

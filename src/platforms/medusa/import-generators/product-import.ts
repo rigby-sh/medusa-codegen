@@ -1,8 +1,7 @@
 import { AbstractGenerator, GeneratorOptions, RunContext } from '../../../types/abstract-generator';
-import { Ollama } from "@langchain/community/llms/ollama";
 import fs from 'fs';
 import medusaProductFields from '../specs/products/medusa-product-fields.json';
-import { findCodeBlocks } from '../../../helpers';
+import { findCodeBlocks, llmFactory } from '../../../helpers';
 
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OpenAIEmbeddings } from "@langchain/openai";
@@ -12,7 +11,7 @@ import { TextLoader } from "langchain/document_loaders/fs/text";
 
 async function importersVectorStore() {
   const loader = new DirectoryLoader(
-    process.cwd() + "/src/importers",
+    process.cwd() + "/src/import-sources",
     {
       ".ts": (path: string) => new TextLoader(path),
     }
@@ -53,10 +52,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
         console.log('Found input source template: ' + importerSourceTemplate);
       }
 
-      const ollama = new Ollama({ 
-        baseUrl: 'http://' + process.env.OLLAMA_HOST + ':' + process.env.OLLAMA_PORT,
-        model: modelName
-       });
+      const llm = llmFactory(modelName);
 
       // TODO: we'll probably need to add a full RAG support with vector store given support for all diferent input sources and how to use them
       // TODO: make it just filling the template not having to know the MedusaJS API - provide an example witihn the template so it just needs to use the fields spec
@@ -97,7 +93,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       console.log('Executing code generator. Please wait ...')
       // console.log(fullPrompt);
   
-      const stream = await ollama.stream(fullPrompt)
+      const stream = await llm.stream(fullPrompt)
 
       const chunks = [];
       for await (const chunk of stream) {
@@ -121,3 +117,4 @@ class MedusaProductImportGenerator extends AbstractGenerator {
 }
 
 export { MedusaProductImportGenerator }
+
