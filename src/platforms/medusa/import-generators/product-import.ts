@@ -52,7 +52,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
         console.log('Found input source template: ' + importerSourceTemplate);
       }
 
-      const llm = llmFactory(modelName);
+      const llm = llmFactory(modelName, process.env['LLM_PROVIDER'] ?? 'openai');
 
       // TODO: we'll probably need to add a full RAG support with vector store given support for all diferent input sources and how to use them
       // TODO: make it just filling the template not having to know the MedusaJS API - provide an example witihn the template so it just needs to use the fields spec

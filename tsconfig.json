@@ -10,8 +10,7 @@
   },
   "ts-node": { "esm": true },
   "include": [
-    "src/**/*.ts",
-    "generated/**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"

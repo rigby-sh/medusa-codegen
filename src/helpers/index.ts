@@ -3,9 +3,9 @@ import { Ollama } from "@langchain/community/llms/ollama";
 const PATTERN = /^([A-Za-z \t]*)```([A-Za-z]*)?\n([\s\S]*?)```([A-Za-z \t]*)*$/gm
 
 
-export function llmFactory(modelName: string, openAIApiKey: string = process.env['OPENAI_API_KEY'] ?? '') {
+export function llmFactory(modelName: string, openAIApiKey: string = process.env['OPENAI_API_KEY'] ?? '', provider: string = process.env['LLM_PROVIDER'] ?? 'openai') { 
 
-    if (openAIApiKey === '') {
+    if (provider === 'ollama') {
         console.debug('Using Ollama as LLM');
         return new Ollama({ 
             baseUrl: 'http://' + process.env.OLLAMA_HOST + ':' + process.env.OLLAMA_PORT,
