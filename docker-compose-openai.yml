@@ -4,7 +4,9 @@ services:
     working_dir: /var/app
     depends_on:
       - medusa
-    env_file: docker/medusa-codegen/default.env
+    env_file: 
+     - docker/medusa-codegen/default.env
+     - .env
     tty: true # to emulate terminal for unquirer to be used
     stdin_open: true
     environment:
@@ -22,7 +24,7 @@ services:
       - '8080'
     ports:
       - '8080:8080'
-    command: bash -c "npm --no-warnings install"
+    command: bash -c "npm --no-warnings install && npm run dev"
     networks:
       - ai-docker
 

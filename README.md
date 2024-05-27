@@ -38,7 +38,7 @@ There's also a Medusa test instance defined in the `docker-compose` file - which
 To add a default admin user please run:
 
 ```
-docker-compose run medusa npx medusa user -e some@email.com -p some-password 
+docker-compose exec medusa npx medusa user -e some@email.com -p some-password 
 ```
 
 ## License
