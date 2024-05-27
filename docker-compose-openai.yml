@@ -17,6 +17,7 @@ services:
       - './nodemon.json:/var/app/nodemon.json'
       - './tsconfig.json:/var/app/tsconfig.json'
       - './generated:/var/app/generated'
+      - './input:/var/app/input'
       - './src:/var/app/src'
     tmpfs:
       - /var/dist

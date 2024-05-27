@@ -28,13 +28,6 @@
         "description": "A flag to indicate if the product represents a gift card. purchasing products with this flag set to true will result in a gift card being created."
     },
     {
-        "field_name": "price",
-        "is_required": true,
-        "type": "number",
-        "default": 0,
-        "description": "The price of the product"
-    },
-    {
         "field_name": "compare_at_price",
         "is_required": false,
         "type": "number",
@@ -124,7 +117,7 @@
         "is_required": false,
         "type": "array",
         "default": [],
-        "description": "An array of product variants to create with the product. each product variant must have a unique combination of product option values."
+        "description": "an array of objects, each object has the required properties title and prices:  title is a string indicating the name of the variant.  prices is an array of objects, each indicating the different prices of the product variant. You can specify prices for different contexts, such as a price for different currencies or regions."
     },
     {
         "field_name": "weight",
