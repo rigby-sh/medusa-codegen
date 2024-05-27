@@ -42,7 +42,6 @@ services:
 
   medusa:
     build:
-      context: .
       dockerfile: ./docker/medusa/Dockerfile
     container_name: medusa
     ports:

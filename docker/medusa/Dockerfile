@@ -2,10 +2,12 @@
 FROM node:latest
 
 # Set working directory
-WORKDIR /var/medusa
+WORKDIR /medusa/my-medusa-store
 
 # Copy project files into the container
-COPY . .
+COPY /medusa/my-medusa-store .
+
+RUN ls
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y python3 python3-pip python-is-python3

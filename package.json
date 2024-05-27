@@ -1,5 +1,5 @@
 {
-  "name": "medusa-integrai",
+  "name": "medusa-codegen",
   "version": "0.0.1",
   "author": {
     "name": "Piotr Karwatka",
@@ -10,8 +10,7 @@
     "dev": "./node_modules/.bin/nodemon -I --quiet",
     "start": "tsx src/app.ts",
     "test-product": "tsx generated/product.ts",
-    "ollama-setup": "tsx src/setup/ollama-setup.ts",
-    "build": "tsc"
+    "ollama-setup": "tsx src/setup/ollama-setup.ts"
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.7",
