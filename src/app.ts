@@ -41,7 +41,7 @@ async function promptUser() {
   });
   generator.run({
     ...selectedOptions,
-    medusaUrl: 'http://medusa:9000/admin'
+    medusaUrl: process.env.MEDUSA_BACKEND_URL
   }) as any;
 }
 
