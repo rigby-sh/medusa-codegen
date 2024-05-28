@@ -80,7 +80,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
        2.4 Then, modify function "transformSourceDataToMedusa" to return data in MedusaJS format:
        from input fields: ${context.inputFields}\n
        map to output fields: \n
-       2.5 Make sure there's at least one variant specified in "variants" and has set price. Name the variant like the product title.
+       2.5 Make sure there's at least one variant specified in "variants" and has set price and currency_code. Name the variant like the product title.
        ${JSON.stringify(fieldsToImport)} \
        Only these outpupt fields should be returned. \
        Set the constant "MEDUSA_BACKEND_URL" to ${context.medusaUrl} \
