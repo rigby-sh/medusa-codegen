@@ -1,3 +1,5 @@
+# This is the default docker-compose file for using OpenAI (no Ollama container);
+# if you need to run the app against LLama3 or other open source models please do use: "docker-compose -f docker-compose-ollama.yml up" instead
 services:
   app:
     image: node:21
