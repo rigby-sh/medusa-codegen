@@ -33,3 +33,5 @@ output/*
 dist/
 
 postgres-data/
+
+.env
