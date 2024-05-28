@@ -6,8 +6,7 @@ import { generatorFactory, dataFlowParameters, parameterOptions } from './platfo
 import { DataFlowDirection } from './types';
 import { AbstractGenerator } from './types/abstract-generator';
 import { checkbox, input } from '@inquirer/prompts';
-
-
+import * as fs from 'fs';
 
 async function promptUser() {
   console.log(chalk.green('Welcome to Medusa ') + chalk.bgCyan('Codegen'));
@@ -69,12 +68,18 @@ async function readJSONfromSTDIN(): Promise<{ [key: string]: any }> {
   })
 }
 
+function readJSONfromFile(fileName:string) {
+  return JSON.parse(fs.readFileSync(fileName));
+}
+
 // Main logic of the application
 async function main() {
-  let selectedOptions: { [key: string]: any } = await readJSONfromSTDIN();
-
-  if (Object.keys(selectedOptions).length === 0)
+  let selectedOptions: { [key: string]: any };
+  if (process.argv.length > 2) { // [0]=node, [1]=file path ...
+    selectedOptions = readJSONfromFile(process.argv[process.argv.length - 1])
+  } else {
     selectedOptions = await promptUser();
+  }
   
   await run(selectedOptions);
   process.exit(0);

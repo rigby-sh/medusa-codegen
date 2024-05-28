@@ -12,7 +12,7 @@ The application is a very simple RAG using the in-memory vectors to find the pro
 Example run using the default `sample-parameters.json`:
 ![sample application run](docs/example-run.png)
 
-You can stream any sort of input parameters as STDIN (eg. streaming json file: `npm run dev < sample-parameters.json`) or you might use the interactive mode `npm run dev`.
+You can stream any sort of input parameters as STDIN (eg. streaming json file: `npm run dev sample-parameters.json`) or you might use the interactive mode `npm run dev`.
 
 When you run this program a data importer code will be generated within the `generated` folder.
 
@@ -178,13 +178,13 @@ This command uses `nodemon` and `tsx` to automatically restart the application w
 To run the example CSV importer you can take the stored `sample-parameters.json` as an input and run the app without the interactive mode by executing:
 
 ```
-docker-compose run app npm run dev < sample-parameters.json
+docker-compose run app npm run dev sample-parameters.json
 ```
 
 or locally:
 
 ```
-npm run dev < sample-parameters.json
+npm run dev sample-parameters.json
 ```
 
 When the product importer is properly generated you can run:
