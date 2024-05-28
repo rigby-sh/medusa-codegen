@@ -12,7 +12,9 @@ The application is a very simple RAG using the in-memory vectors to find the pro
 Example run using the default `sample-parameters.json`:
 ![sample application run](docs/example-run.png)
 
-You can stream any sort of input parameters as STDIN (eg. streaming json file: `npm run dev sample-parameters.json`) or you might use the interactive mode `npm run dev`.
+You can stream any sort of input parameters as JSON file (`npm run dev sample-parameters.json`) or you might use the interactive mode `npm run dev`.
+
+<a href="https://www.loom.com/share/1590dcd8387a4728bfb1448ca298615d?sid=dc3932b2-a908-4dbf-8d22-97051fcf1c9a">![generiting importer](docs/loom-importing.png)</a>
 
 When you run this program a data importer code will be generated within the `generated` folder.
 
@@ -76,6 +78,8 @@ const transformSourceDataToMedusa = (sourceRecord: any): any => {
 }
 ```
 
+## Loom showing product import
+<a href="https://www.loom.com/share/c2d3853d29c6485fa94e24b28580303f?sid=a56bd174-7572-45cb-89bd-0249c480bbb8">![product import](docs/loom-importing.png)</a>
 The program can be tested by running `npm run test-product`
 
 As you see it's pretty straightforward to extend the app by defining new [import-sources](src/import-sources/) and adding new [importer generators](src/platforms//medusa//import-generators/).
