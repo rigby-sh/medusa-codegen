@@ -9,12 +9,6 @@ import { checkbox, input } from '@inquirer/prompts';
 
 
 
-/**
- * TODO:
- * 1. Add Medusa to Docekrfile
- * 2. Add Ollama to Docker file
- * 3. Use LLama3 via Docker
- */
 async function promptUser() {
   console.log(chalk.green('Welcome to Medusa Integr') + chalk.bgCyan('ai'));
 
