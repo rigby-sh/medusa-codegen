@@ -14,12 +14,9 @@ Example run using the default `sample-parameters.json`:
 
 You can stream any sort of input parameters as STDIN (eg. streaming json file: `npm run dev < sample-parameters.json`) or you might use the interactive mode `npm run dev`.
 
-When you run this program a data importer code will be generated within the `generated` folder:
-![generated folder](docs/generated-folder.png)
-
+When you run this program a data importer code will be generated within the `generated` folder.
 
 ## Input parameters and extension points
-
 
 Sample input parameters for `product-importer` generator:
 
