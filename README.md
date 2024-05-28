@@ -14,7 +14,7 @@ Example run using the default `sample-parameters.json`:
 
 You can stream any sort of input parameters as JSON file (`npm run dev sample-parameters.json`) or you might use the interactive mode `npm run dev`.
 
-<a href="https://www.loom.com/share/1590dcd8387a4728bfb1448ca298615d?sid=dc3932b2-a908-4dbf-8d22-97051fcf1c9a">![generiting importer](docs/loom-importing.png)</a>
+<a href="https://www.loom.com/share/1590dcd8387a4728bfb1448ca298615d?sid=dc3932b2-a908-4dbf-8d22-97051fcf1c9a">![generiting importer](docs/loom-generating.png)</a>
 
 When you run this program a data importer code will be generated within the `generated` folder.
 
