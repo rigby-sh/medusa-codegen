@@ -24,12 +24,12 @@ const parameterOptions = (key: string, selectedOptions: { [key: string]: any }):
             name: 'Import to Medusa',
             value: 'import',
             description: 'Import data from external file, API or database TO Medusa',
-          },
-          {
+          }/*       ,
+   {
             name: 'Export from Medusa',
             value: 'export',
             description: 'Export data to external file, API or database FROM Medusa',
-          },
+          },*/ // TODO: add different types of codeges - for example module generation
         ]
      } 
     case 'dataFlowType': 
@@ -42,7 +42,7 @@ const parameterOptions = (key: string, selectedOptions: { [key: string]: any }):
             value: 'product',
             description: 'Products',
             },
-            {
+/*            {
             name: 'customer',
             value: 'customer',
             description: 'Customers',
@@ -51,7 +51,7 @@ const parameterOptions = (key: string, selectedOptions: { [key: string]: any }):
             name: 'order',
             value: 'order',
             description: 'Orders',
-            },
+            },*/
         ],
       }
       case 'fields': {

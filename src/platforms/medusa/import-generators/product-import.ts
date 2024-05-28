@@ -54,8 +54,7 @@ class MedusaProductImportGenerator extends AbstractGenerator {
 
       const llm = llmFactory(modelName, process.env['LLM_PROVIDER'] ?? 'openai');
 
-      // TODO: we'll probably need to add a full RAG support with vector store given support for all diferent input sources and how to use them
-      // TODO: make it just filling the template not having to know the MedusaJS API - provide an example witihn the template so it just needs to use the fields spec
+      // TODO: add a better support for variants importing
       const fullPrompt =         
         `\
         Generate the code for TypeScript program which Imports the data: ${inputSourcePrompt}\
@@ -81,12 +80,14 @@ class MedusaProductImportGenerator extends AbstractGenerator {
        2.4 Then, modify function "transformSourceDataToMedusa" to return data in MedusaJS format:
        from input fields: ${context.inputFields}\n
        map to output fields: \n
+       2.5 Make sure there's at least one variant specified in "variants" and has set price. Name the variant like the product title.
        ${JSON.stringify(fieldsToImport)} \
        Only these outpupt fields should be returned. \
        Set the constant "MEDUSA_BACKEND_URL" to ${context.medusaUrl} \
        Set the constant "MEUDUSA_USERNAME" to ${context.medusaUserName} \
        Set the constant "MEUDUSA_PASSWORD" to: ${context.medusaPassword} \
        Use only standard Node modules like fs, http and others. Do not use any undefined functions.
+       Display nice message from AXIOS error in importSingleProduct in case of error
        \n
        Return the full source code of entire program including all imports, constains and functions. \
        `;
@@ -108,8 +109,8 @@ class MedusaProductImportGenerator extends AbstractGenerator {
       } else {
         const generatedCode = codeBlocks.blocks.map(b => b.code).join('\n');
         console.info('Writing code to file: ' + outputFileNameSnapshot + ' and ' + outputFileName);
-        fs.writeFileSync(outputFileNameSnapshot, generatedCode);
-        fs.writeFileSync(outputFileName, generatedCode);
+        fs.writeFileSync(outputFileNameSnapshot, generatedCode); // snapshot with timestamp
+        fs.writeFileSync(outputFileName, generatedCode); // snapshot to be used by "npm run test-product"
       }
       
       // TODO: write file to `generators` directory

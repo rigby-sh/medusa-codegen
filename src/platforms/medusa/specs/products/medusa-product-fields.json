@@ -114,7 +114,7 @@
     },
     {
         "field_name": "variants",
-        "is_required": false,
+        "is_required": true,
         "type": "array",
         "default": [],
         "description": "an array of objects, each object has the required properties title and prices:  title is a string indicating the name of the variant.  prices is an array of objects, each indicating the different prices of the product variant. You can specify prices for different contexts, such as a price for different currencies or regions."

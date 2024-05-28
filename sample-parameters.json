@@ -1,0 +1,10 @@
+{
+    "dataFlowDirection": "import",
+    "dataFlowType": "product",
+    "fields": [ "title", "subtitle", "variants" ],
+    "inputSource": "import products from CSV file located in /input/products.csv",
+    "inputFields": "name:string, price:string, description:string; get the default variant price from 'price' field; subtitle from description field",
+    "dataTransform": "make sure price is parseInt() and that product title is uppercase",
+    "medusaUserName": "some@email.com",
+    "medusaPassword": "some-password"
+  }

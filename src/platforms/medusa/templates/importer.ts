@@ -1,37 +1,39 @@
 import Medusa from "@medusajs/medusa-js"
 
-const MEDUSA_BACKEND_URL = 'http://medusa:9000/admin'
+const MEDUSA_BACKEND_URL = 'http://medusa:9000/'
 const MEUDUSA_USERNAME = ''
 const MEDUSA_PASSWORD = ''
 
 const medusa = new Medusa({ baseUrl: MEDUSA_BACKEND_URL, maxRetries: 3 })
 
-const initMedusaSession = async (): Promise<any> => {
-    const userData = await medusa.admin.auth.createSession({
-        email: MEUDUSA_USERNAME,
-        password: MEDUSA_PASSWORD,
-    })
-        .then(({ user }) => {
-        console.log(user.id);
-    })
-    return userData
+const getMedusaToken = async (): Promise<string> => {
+  return medusa.admin.auth.getToken({
+      email: MEUDUSA_USERNAME,
+      password: MEDUSA_PASSWORD,
+  })
+  .then(({ access_token }) => {
+      console.log('Medusa Access Token: ' + access_token);
+      return access_token;
+  })
 }
 
-const inputPath = process.cwd() + '/input';
+const inputPath = process.cwd() + '/input/products.csv';
 
-const importSingleProduct = async (product:any) => {
-  return medusa.admin.products.create(product)
+const importSingleProduct = async (product:any, apiToken:string) => {
+  console.log("Product in Medusa format: ", product)
+  return medusa.admin.products.create(product, { Authorization: ' Bearer ' + apiToken })
   .then(({ product }) => {
-    console.log(product.id);
+    console.log("Product successfully added with ID: " + product.id);
   })
 }
 
 const transformSourceDataToMedusa = (sourceRecord: any): any => {
-    return sourceRecord
+  console.log("Product in source format: ", sourceRecord)
+  return sourceRecord
 }
 
 const runImport = async () => {
+  const apiToken:string = await getMedusaToken()
 };
 
-const adminUser = initMedusaSession()
 runImport();
